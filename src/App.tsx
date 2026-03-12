@@ -1,6 +1,8 @@
-import { motion } from "motion/react";
-import { ArrowUpRight, Github, Linkedin, Mail } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { ArrowUpRight, Github, Linkedin, Mail, Play, X } from "lucide-react";
 import profileCutout from "./assets/profile-cutout.png";
+import voabtDemoFast from "./assets/voabt-demo-fast.mp4";
 
 function Hero() {
   return (
@@ -179,15 +181,21 @@ function CodeLabSection() {
 }
 
 function Projects() {
+  const [activeVideoProject, setActiveVideoProject] = useState<string | null>(null);
+
   const projects = [
     {
+      id: "voabt",
       title: "VOABT",
       subtitle: "Voice-Activated Cartesian Bot",
       desc: "An assistive robotics project enabling voice-controlled handwriting for users with motor impairments. Engineered a Python-based control system integrating Whisper AI for real-time voice-to-text conversion.",
       tags: ["Python", "Whisper AI", "CNC", "Hardware"],
-      imagePlaceholder: "[ Place VOABT Hardware/Action Image Here ]"
+      imagePlaceholder: "[ Place VOABT Hardware/Action Image Here ]",
+      videoSrc: voabtDemoFast,
+      mediaHint: "Hover to preview. Click for player."
     },
     {
+      id: "gunshot-detection",
       title: "Gunshot Detection",
       subtitle: "IoT Security System",
       desc: "Developed a gunshot detection system utilizing IoT sensors and real-time data processing to enhance security and provide immediate alerts.",
@@ -195,6 +203,7 @@ function Projects() {
       imagePlaceholder: "[ Place Gunshot Detection System Image Here ]"
     },
     {
+      id: "face-emotion-detection",
       title: "Face Emotion Detection",
       subtitle: "Computer Vision & AI",
       desc: "Implemented a real-time facial emotion recognition system using deep learning to analyze and classify human emotions from video feeds.",
@@ -202,6 +211,29 @@ function Projects() {
       imagePlaceholder: "[ Place Face Emotion Detection Image Here ]"
     }
   ];
+
+  useEffect(() => {
+    if (!activeVideoProject) {
+      return undefined;
+    }
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setActiveVideoProject(null);
+      }
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleEscape);
+    };
+  }, [activeVideoProject]);
+
+  const activeProject = projects.find((project) => project.id === activeVideoProject);
 
   return (
     <section className="py-20 px-4 sm:px-8 md:px-16 bg-white/5 overflow-hidden">
@@ -217,33 +249,13 @@ function Projects() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project, i) => (
-            <motion.div 
-              key={i}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
-              className="group cursor-pointer"
-            >
-              <div className="aspect-square bg-dark border border-white/10 rounded-2xl mb-6 overflow-hidden relative flex items-center justify-center group-hover:border-neon/50 transition-all duration-500">
-                <div className="absolute inset-0 bg-neon/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></div>
-                <motion.div className="relative z-10 transform group-hover:scale-110 transition-transform duration-500">
-                  <p className="font-mono text-xs text-gray-600 text-center px-4 group-hover:text-white transition-colors duration-300">
-                    {project.imagePlaceholder}
-                  </p>
-                </motion.div>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {project.tags.map((tag, j) => (
-                  <span key={j} className="font-mono text-[10px] uppercase tracking-wider border border-white/20 px-2 py-1 rounded-full text-gray-400 group-hover:border-neon/50 group-hover:text-neon transition-colors duration-300">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              <h3 className="font-display text-3xl uppercase mb-2 group-hover:text-neon transition-colors duration-300">{project.title}</h3>
-              <h4 className="font-sans font-medium text-white/70 mb-3 group-hover:text-white transition-colors duration-300">{project.subtitle}</h4>
-              <p className="font-sans text-sm text-gray-400 line-clamp-3 group-hover:text-gray-300 transition-colors duration-300">{project.desc}</p>
-            </motion.div>
+            <div key={project.id}>
+              <ProjectCard
+                index={i}
+                project={project}
+                onOpenVideo={setActiveVideoProject}
+              />
+            </div>
           ))}
         </div>
         
@@ -258,8 +270,180 @@ function Projects() {
             <Github size={18} /> View More on GitHub
           </a>
         </motion.div>
+
+        <AnimatePresence>
+          {activeProject?.videoSrc ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setActiveVideoProject(null)}
+              className="fixed inset-0 z-50 flex items-end justify-center bg-black/80 px-4 py-6 backdrop-blur-md sm:items-center"
+            >
+              <motion.div
+                initial={{ opacity: 0, y: 30, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 18, scale: 0.96 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                onClick={(event) => event.stopPropagation()}
+                className="w-full max-w-xl overflow-hidden rounded-4xl border border-neon/25 bg-[linear-gradient(180deg,rgba(204,255,0,0.08),rgba(255,255,255,0.02))] shadow-[0_24px_80px_rgba(0,0,0,0.5)]"
+              >
+                <div className="flex items-center justify-between border-b border-white/10 px-5 py-4 sm:px-6">
+                  <div>
+                    <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-neon">Project Demo</p>
+                    <h3 className="mt-1 font-display text-3xl uppercase leading-none text-white">{activeProject.title}</h3>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveVideoProject(null)}
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white transition-colors hover:border-neon/60 hover:text-neon"
+                    aria-label="Close project video"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+                <div className="p-4 sm:p-5">
+                  <video
+                    src={activeProject.videoSrc}
+                    controls
+                    autoPlay
+                    playsInline
+                    preload="metadata"
+                    className="aspect-video w-full rounded-3xl border border-white/10 bg-black object-cover"
+                  />
+                  <p className="mt-4 font-sans text-sm leading-6 text-gray-400">Sped-up walkthrough of the VOABT build, styled to match the site and opened in a compact neon-accent player.</p>
+                </div>
+              </motion.div>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       </div>
     </section>
+  );
+}
+
+function ProjectCard({
+  project,
+  index,
+  onOpenVideo,
+}: {
+  project: {
+    id: string;
+    title: string;
+    subtitle: string;
+    desc: string;
+    tags: string[];
+    imagePlaceholder: string;
+    videoSrc?: string;
+    mediaHint?: string;
+  };
+  index: number;
+  onOpenVideo: (projectId: string) => void;
+}) {
+  const [isHovered, setIsHovered] = useState(false);
+  const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
+  const previewRef = useRef<HTMLVideoElement | null>(null);
+
+  const playPreviewOnce = () => {
+    if (!project.videoSrc || !previewRef.current || isPreviewPlaying) {
+      return;
+    }
+
+    const preview = previewRef.current;
+    preview.currentTime = 0;
+    setIsPreviewPlaying(true);
+    preview.play().catch(() => {
+      setIsPreviewPlaying(false);
+    });
+  };
+
+  const resetPreview = () => {
+    if (!previewRef.current) {
+      setIsPreviewPlaying(false);
+      return;
+    }
+
+    previewRef.current.pause();
+    previewRef.current.currentTime = 0;
+    setIsPreviewPlaying(false);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6, delay: index * 0.15, ease: "easeOut" }}
+      onHoverStart={() => {
+        setIsHovered(true);
+        playPreviewOnce();
+      }}
+      onHoverEnd={() => setIsHovered(false)}
+      className="group"
+    >
+      {project.videoSrc ? (
+        <button
+          type="button"
+          onClick={() => onOpenVideo(project.id)}
+          className="block w-full text-left"
+          aria-label={`Open ${project.title} demo video player`}
+        >
+          <div className="aspect-square bg-dark border border-white/10 rounded-2xl mb-6 overflow-hidden relative transition-all duration-500 group-hover:border-neon/50 group-hover:shadow-[0_0_0_1px_rgba(204,255,0,0.2)]">
+            <video
+              ref={previewRef}
+              src={project.videoSrc}
+              muted
+              playsInline
+              preload="metadata"
+              onEnded={resetPreview}
+              className="h-full w-full object-cover opacity-70 transition duration-500 group-hover:scale-[1.02] group-hover:opacity-95"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.02),rgba(5,5,5,0.82))]"></div>
+            <div className="absolute inset-x-4 top-4 flex items-center justify-between gap-3">
+              <span className="rounded-full border border-neon/40 bg-neon/10 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.22em] text-neon">
+                Demo Preview
+              </span>
+              <span className="rounded-full border border-white/10 bg-black/40 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.22em] text-white/70">
+                1.6x Speed
+              </span>
+            </div>
+            <div className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-4">
+              <div>
+                <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-neon/90">VOABT Demo</p>
+                <p className="mt-2 max-w-56 font-sans text-sm leading-5 text-white/80">{project.mediaHint}</p>
+              </div>
+              <motion.div
+                animate={{ scale: isHovered || isPreviewPlaying ? [1, 1.08, 1] : 1 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="flex h-14 w-14 items-center justify-center rounded-full border border-neon/50 bg-black/55 text-neon shadow-[0_0_30px_rgba(204,255,0,0.18)]"
+              >
+                <Play size={20} className="ml-1" />
+              </motion.div>
+            </div>
+          </div>
+        </button>
+      ) : (
+        <div className="aspect-square bg-dark border border-white/10 rounded-2xl mb-6 overflow-hidden relative flex items-center justify-center group-hover:border-neon/50 transition-all duration-500">
+          <div className="absolute inset-0 bg-neon/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></div>
+          <motion.div className="relative z-10 transform group-hover:scale-110 transition-transform duration-500">
+            <p className="font-mono text-xs text-gray-600 text-center px-4 group-hover:text-white transition-colors duration-300">
+              {project.imagePlaceholder}
+            </p>
+          </motion.div>
+        </div>
+      )}
+
+      <div className="flex flex-wrap gap-2 mb-4">
+        {project.tags.map((tag, j) => (
+          <span key={j} className="font-mono text-[10px] uppercase tracking-wider border border-white/20 px-2 py-1 rounded-full text-gray-400 group-hover:border-neon/50 group-hover:text-neon transition-colors duration-300">
+            {tag}
+          </span>
+        ))}
+      </div>
+      <h3 className="font-display text-3xl uppercase mb-2 group-hover:text-neon transition-colors duration-300">{project.title}</h3>
+      <h4 className="font-sans font-medium text-white/70 mb-3 group-hover:text-white transition-colors duration-300">{project.subtitle}</h4>
+      <p className="font-sans text-sm text-gray-400 line-clamp-3 group-hover:text-gray-300 transition-colors duration-300">{project.desc}</p>
+    </motion.div>
   );
 }
 
