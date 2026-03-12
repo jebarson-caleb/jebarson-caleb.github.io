@@ -102,7 +102,7 @@ function CodeLabSection() {
                 Designed real-time progress tracking and notification system improving student engagement.
               </li>
             </ul>
-            <a href="https://github.com/jebarson-caleb" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 font-mono text-dark bg-neon px-6 py-3 rounded-full hover:bg-white transition-colors uppercase font-bold text-sm tracking-wider">
+            <a href="https://codelab.612151820.xyz/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-mono text-dark bg-neon px-6 py-3 rounded-full hover:bg-white transition-colors uppercase font-bold text-sm tracking-wider">
               View Project <ArrowUpRight size={16} />
             </a>
           </motion.div>
@@ -207,7 +207,7 @@ function Projects() {
           transition={{ delay: 0.5 }}
           className="mt-16 text-center"
         >
-          <a href="https://github.com/jebarson-caleb" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 font-mono text-white border border-white/20 px-8 py-4 rounded-full hover:bg-white hover:text-dark hover:scale-105 transition-all duration-300 uppercase font-bold text-sm tracking-wider">
+          <a href="https://github.com/jebarson-caleb" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-mono text-white border border-white/20 px-8 py-4 rounded-full hover:bg-white hover:text-dark hover:scale-105 transition-all duration-300 uppercase font-bold text-sm tracking-wider">
             <Github size={18} /> View More on GitHub
           </a>
         </motion.div>
@@ -266,10 +266,10 @@ function Footer() {
             <a href="mailto:jebarsoncalebd@gmail.com" className="flex items-center gap-3 hover:text-neon transition-colors">
               <Mail size={18} /> jebarsoncalebd@gmail.com
             </a>
-            <a href="https://www.linkedin.com/in/jebarson-caleb/" target="_blank" rel="noreferrer" className="flex items-center gap-3 hover:text-neon transition-colors">
+            <a href="https://www.linkedin.com/in/jebarson-caleb/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-neon transition-colors">
               <Linkedin size={18} /> LinkedIn
             </a>
-            <a href="https://github.com/jebarson-caleb" target="_blank" rel="noreferrer" className="flex items-center gap-3 hover:text-neon transition-colors">
+            <a href="https://github.com/jebarson-caleb" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-neon transition-colors">
               <Github size={18} /> GitHub
             </a>
           </div>
