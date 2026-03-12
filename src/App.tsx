@@ -5,6 +5,7 @@ import profileCutout from "./assets/profile-cutout.png";
 import faceEmotionOne from "./assets/face-emotion-1.jpg";
 import faceEmotionTwo from "./assets/face-emotion-2.jpg";
 import faceEmotionThree from "./assets/face-emotion-3.jpg";
+import codelabDashboardPreview from "./assets/codelab-dashboard-preview.mp4";
 import voabtDemoFast from "./assets/voabt-demo-fast.mp4";
 
 function Hero() {
@@ -110,6 +111,27 @@ function Marquee() {
 }
 
 function CodeLabSection() {
+  const [isCodeLabHovered, setIsCodeLabHovered] = useState(false);
+  const codelabPreviewRef = useRef<HTMLVideoElement | null>(null);
+
+  const playCodeLabPreview = () => {
+    if (!codelabPreviewRef.current) {
+      return;
+    }
+
+    codelabPreviewRef.current.currentTime = 0;
+    codelabPreviewRef.current.play().catch(() => undefined);
+  };
+
+  const resetCodeLabPreview = () => {
+    if (!codelabPreviewRef.current) {
+      return;
+    }
+
+    codelabPreviewRef.current.pause();
+    codelabPreviewRef.current.currentTime = 0;
+  };
+
   return (
     <section className="py-20 px-4 sm:px-8 md:px-16 overflow-hidden">
       <div className="max-w-7xl mx-auto">
@@ -166,15 +188,48 @@ function CodeLabSection() {
             className="w-full md:w-1/2 relative"
           >
             <motion.div 
-              whileHover={{ scale: 1.05, rotate: 1 }}
+              whileHover={{ scale: 1.03, rotate: 0.5 }}
               transition={{ type: "spring", stiffness: 300 }}
-              className="aspect-4/3 bg-white/5 border border-white/10 rounded-3xl overflow-hidden flex items-center justify-center relative group cursor-pointer"
+              onHoverStart={() => {
+                setIsCodeLabHovered(true);
+                playCodeLabPreview();
+              }}
+              onHoverEnd={() => {
+                setIsCodeLabHovered(false);
+                resetCodeLabPreview();
+              }}
+              className="aspect-4/3 bg-white/5 border border-white/10 rounded-3xl overflow-hidden relative group cursor-pointer shadow-[0_24px_80px_rgba(0,0,0,0.35)]"
             >
-              <div className="absolute inset-0 bg-linear-to-tr from-neon/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <p className="font-mono text-gray-500 text-center px-6 relative z-10 group-hover:text-white transition-colors duration-300">
-                [ Place CodeLab Dashboard Image Here ]<br/>
-                <span className="text-xs mt-2 block">Showcasing the automated evaluation interface or student progress tracking</span>
-              </p>
+              <video
+                ref={codelabPreviewRef}
+                src={codelabDashboardPreview}
+                muted
+                playsInline
+                preload="metadata"
+                className="absolute inset-0 h-full w-full object-cover opacity-55 transition duration-500 group-hover:scale-[1.01] group-hover:opacity-90"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.1),rgba(5,5,5,0.85))]"></div>
+              <div className="absolute inset-0 bg-linear-to-tr from-neon/20 via-transparent to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-100"></div>
+              <div className="absolute inset-x-5 top-5 flex items-center justify-between gap-4 z-10">
+                <span className="rounded-full border border-neon/40 bg-neon/10 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.24em] text-neon">
+                  Dashboard Preview
+                </span>
+                <span className="rounded-full border border-white/10 bg-black/40 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.24em] text-white/70">
+                  Hover To Play
+                </span>
+              </div>
+              <div className="absolute inset-x-5 bottom-5 z-10 flex items-end justify-between gap-4">
+                <div>
+                  <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-neon/90">CodeLab Live UI</p>
+                </div>
+                <motion.div
+                  animate={{ scale: isCodeLabHovered ? [1, 1.08, 1] : 1, opacity: isCodeLabHovered ? 1 : 0.75 }}
+                  transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                  className="flex h-14 w-14 items-center justify-center rounded-full border border-neon/50 bg-black/55 text-neon shadow-[0_0_30px_rgba(204,255,0,0.18)]"
+                >
+                  <Play size={20} className="ml-1" />
+                </motion.div>
+              </div>
             </motion.div>
           </motion.div>
         </div>
@@ -185,6 +240,7 @@ function CodeLabSection() {
 
 function Projects() {
   const [activeVideoProject, setActiveVideoProject] = useState<string | null>(null);
+  const modalVideoRef = useRef<HTMLVideoElement | null>(null);
 
   const projects = [
     {
@@ -236,6 +292,14 @@ function Projects() {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", handleEscape);
     };
+  }, [activeVideoProject]);
+
+  useEffect(() => {
+    if (!activeVideoProject || !modalVideoRef.current) {
+      return;
+    }
+
+    modalVideoRef.current.playbackRate = 1.5;
   }, [activeVideoProject]);
 
   const activeProject = projects.find((project) => project.id === activeVideoProject);
@@ -309,6 +373,7 @@ function Projects() {
                 </div>
                 <div className="p-4 sm:p-5">
                   <video
+                    ref={modalVideoRef}
                     src={activeProject.videoSrc}
                     controls
                     autoPlay
