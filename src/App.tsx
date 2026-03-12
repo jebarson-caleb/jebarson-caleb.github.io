@@ -1,39 +1,86 @@
 import { motion } from "motion/react";
 import { ArrowUpRight, Github, Linkedin, Mail } from "lucide-react";
+import profileCutout from "./assets/profile-cutout.png";
 
 function Hero() {
   return (
-    <section className="min-h-screen flex flex-col justify-center px-4 sm:px-8 md:px-16 pt-20 relative overflow-hidden">
-      <div className="z-10">
-        <motion.p 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="font-mono text-neon text-sm md:text-base uppercase tracking-widest mb-4"
+    <section className="min-h-screen px-4 pt-20 pb-10 sm:px-8 md:px-16 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(204,255,0,0.16),transparent_28%),radial-gradient(circle_at_80%_20%,rgba(255,255,255,0.08),transparent_22%)]"></div>
+      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl items-center gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
+        <div>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="font-mono text-neon text-sm md:text-base uppercase tracking-widest mb-4"
+          >
+            Software Intern & Full-Stack Developer
+          </motion.p>
+          <motion.h1 
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="font-display text-[15vw] leading-[0.8] uppercase m-0 glitch-wrapper lg:text-[10vw]"
+          >
+            <span className="glitch" data-text="JEBARSON">JEBARSON</span><br/>
+            <span className="text-outline">CALEB D</span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.45 }}
+            className="mt-6 max-w-xl font-sans text-base leading-7 text-gray-400 md:text-lg"
+          >
+            Passionate technologist specializing in embedded systems, full-stack web development, and IoT-based innovation.
+          </motion.p>
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 48, scale: 0.95 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          transition={{ duration: 0.9, delay: 0.35, ease: "easeOut" }}
+          className="relative mx-auto w-full max-w-sm sm:max-w-md lg:max-w-lg"
         >
-          Software Intern & Full-Stack Developer
-        </motion.p>
-        <motion.h1 
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="font-display text-[15vw] leading-[0.8] uppercase m-0 glitch-wrapper"
-        >
-          <span className="glitch" data-text="JEBARSON">JEBARSON</span><br/>
-          <span className="text-outline">CALEB D</span>
-        </motion.h1>
+          <motion.div
+            animate={{ y: [0, -16, 0], rotate: [-1, 1, -1] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="relative"
+          >
+            <div className="absolute inset-x-8 bottom-0 h-14 rounded-full bg-neon/30 blur-3xl"></div>
+            <motion.div
+              animate={{ opacity: [0.35, 0.8, 0.35], scale: [0.98, 1.04, 0.98] }}
+              transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute -inset-4 rounded-[2.5rem] border border-neon/20 bg-neon/5"
+            ></motion.div>
+            <div className="relative overflow-hidden rounded-4xl border border-white/10 bg-white/6 px-4 pt-6 backdrop-blur-sm sm:px-6">
+              <motion.div
+                animate={{ x: [0, 10, 0], y: [0, -6, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute right-3 top-4 rounded-full border border-white/15 bg-black/35 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.22em] text-neon sm:right-5"
+              >
+                Full-Stack + Embedded
+              </motion.div>
+              <motion.img
+                src={profileCutout}
+                alt="Jebarson Caleb portrait"
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                className="relative z-10 mx-auto h-auto w-full object-contain drop-shadow-[0_24px_60px_rgba(0,0,0,0.55)]"
+              />
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.9 }}
+            className="absolute -left-2 bottom-10 rounded-2xl border border-white/10 bg-black/45 px-4 py-3 backdrop-blur-md sm:-left-8"
+          >
+            <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-neon">Available For</p>
+            <p className="mt-1 font-sans text-sm text-white">Software roles, product builds, and rapid prototypes</p>
+          </motion.div>
+        </motion.div>
       </div>
-      
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1 }}
-        className="absolute bottom-10 right-4 sm:right-8 md:right-16 max-w-xs text-right"
-      >
-        <p className="font-sans text-sm md:text-base text-gray-400">
-          Passionate technologist specializing in embedded systems, full-stack web development, and IoT-based innovation.
-        </p>
-      </motion.div>
     </section>
   );
 }
@@ -116,9 +163,9 @@ function CodeLabSection() {
             <motion.div 
               whileHover={{ scale: 1.05, rotate: 1 }}
               transition={{ type: "spring", stiffness: 300 }}
-              className="aspect-[4/3] bg-white/5 border border-white/10 rounded-3xl overflow-hidden flex items-center justify-center relative group cursor-pointer"
+              className="aspect-4/3 bg-white/5 border border-white/10 rounded-3xl overflow-hidden flex items-center justify-center relative group cursor-pointer"
             >
-              <div className="absolute inset-0 bg-gradient-to-tr from-neon/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="absolute inset-0 bg-linear-to-tr from-neon/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <p className="font-mono text-gray-500 text-center px-6 relative z-10 group-hover:text-white transition-colors duration-300">
                 [ Place CodeLab Dashboard Image Here ]<br/>
                 <span className="text-xs mt-2 block">Showcasing the automated evaluation interface or student progress tracking</span>
