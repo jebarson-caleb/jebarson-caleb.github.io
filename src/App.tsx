@@ -2,6 +2,9 @@ import { AnimatePresence, motion } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { ArrowUpRight, Github, Linkedin, Mail, Play, X } from "lucide-react";
 import profileCutout from "./assets/profile-cutout.png";
+import faceEmotionOne from "./assets/face-emotion-1.jpg";
+import faceEmotionTwo from "./assets/face-emotion-2.jpg";
+import faceEmotionThree from "./assets/face-emotion-3.jpg";
 import voabtDemoFast from "./assets/voabt-demo-fast.mp4";
 
 function Hero() {
@@ -208,7 +211,9 @@ function Projects() {
       subtitle: "Computer Vision & AI",
       desc: "Implemented a real-time facial emotion recognition system using deep learning to analyze and classify human emotions from video feeds.",
       tags: ["AI/ML", "Computer Vision", "Python"],
-      imagePlaceholder: "[ Place Face Emotion Detection Image Here ]"
+      imagePlaceholder: "[ Place Face Emotion Detection Image Here ]",
+      imageGallerySrcs: [faceEmotionOne, faceEmotionTwo, faceEmotionThree],
+      mediaHint: "Emotion states preview with animated frame transitions."
     }
   ];
 
@@ -335,6 +340,7 @@ function ProjectCard({
     tags: string[];
     imagePlaceholder: string;
     videoSrc?: string;
+    imageGallerySrcs?: string[];
     mediaHint?: string;
   };
   index: number;
@@ -342,7 +348,20 @@ function ProjectCard({
 }) {
   const [isHovered, setIsHovered] = useState(false);
   const [isPreviewPlaying, setIsPreviewPlaying] = useState(false);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const previewRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    if (!project.imageGallerySrcs || project.imageGallerySrcs.length < 2) {
+      return undefined;
+    }
+
+    const interval = window.setInterval(() => {
+      setActiveImageIndex((currentIndex) => (currentIndex + 1) % project.imageGallerySrcs!.length);
+    }, 2400);
+
+    return () => window.clearInterval(interval);
+  }, [project.imageGallerySrcs]);
 
   const playPreviewOnce = () => {
     if (!project.videoSrc || !previewRef.current || isPreviewPlaying) {
@@ -422,6 +441,43 @@ function ProjectCard({
             </div>
           </div>
         </button>
+      ) : project.imageGallerySrcs?.length ? (
+        <div className="aspect-square bg-dark border border-white/10 rounded-2xl mb-6 overflow-hidden relative transition-all duration-500 group-hover:border-neon/50 group-hover:shadow-[0_0_0_1px_rgba(204,255,0,0.2)]">
+          <AnimatePresence mode="wait">
+            <motion.img
+              key={project.imageGallerySrcs[activeImageIndex]}
+              src={project.imageGallerySrcs[activeImageIndex]}
+              alt={`${project.title} preview ${activeImageIndex + 1}`}
+              initial={{ opacity: 0, scale: 1.08, filter: "blur(12px)" }}
+              animate={{ opacity: 1, scale: isHovered ? 1.04 : 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0, scale: 0.96, filter: "blur(12px)" }}
+              transition={{ duration: 0.55, ease: "easeOut" }}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          </AnimatePresence>
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,5,5,0.08),rgba(5,5,5,0.78))]"></div>
+          <div className="absolute inset-x-4 top-4 flex items-center justify-between gap-3">
+            <span className="rounded-full border border-neon/40 bg-neon/10 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.22em] text-neon">
+              Preview Frames
+            </span>
+            <span className="rounded-full border border-white/10 bg-black/40 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.22em] text-white/70">
+              {activeImageIndex + 1}/{project.imageGallerySrcs.length}
+            </span>
+          </div>
+          <div className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-4">
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.28em] text-neon/90">Emotion Detection</p>
+              <p className="mt-2 max-w-56 font-sans text-sm leading-5 text-white/80">{project.mediaHint}</p>
+            </div>
+            <motion.div
+              animate={{ y: [0, -6, 0], opacity: [0.65, 1, 0.65] }}
+              transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+              className="rounded-2xl border border-white/10 bg-black/45 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.22em] text-white/70"
+            >
+              Live Sequence
+            </motion.div>
+          </div>
+        </div>
       ) : (
         <div className="aspect-square bg-dark border border-white/10 rounded-2xl mb-6 overflow-hidden relative flex items-center justify-center group-hover:border-neon/50 transition-all duration-500">
           <div className="absolute inset-0 bg-neon/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out"></div>
