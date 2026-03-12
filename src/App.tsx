@@ -5,6 +5,8 @@ import profileCutout from "./assets/profile-cutout.png";
 import faceEmotionOne from "./assets/face-emotion-1.jpg";
 import faceEmotionTwo from "./assets/face-emotion-2.jpg";
 import faceEmotionThree from "./assets/face-emotion-3.jpg";
+import hexacopterOne from "./assets/hexacopter-1.jpg";
+import hexacopterTwo from "./assets/hexacopter-2.jpg";
 import codelabDashboardPreview from "./assets/codelab-dashboard-preview.mp4";
 import voabtDemoFast from "./assets/voabt-demo-fast.mp4";
 
@@ -254,12 +256,14 @@ function Projects() {
       mediaHint: "Hover to preview. Click for player."
     },
     {
-      id: "gunshot-detection",
-      title: "Gunshot Detection",
-      subtitle: "IoT Security System",
-      desc: "Developed a gunshot detection system utilizing IoT sensors and real-time data processing to enhance security and provide immediate alerts.",
-      tags: ["IoT", "Sensors", "Real-time"],
-      imagePlaceholder: "[ Place Gunshot Detection System Image Here ]"
+      id: "hexacopter-swarm-drone",
+      title: "Hexacopter Drone",
+      subtitle: "Swarm Automation Platform",
+      desc: "Built a custom DIY drone program centered on hexacopter and quadcopter platforms for swarm-oriented automation experiments, rapid prototyping, and coordinated flight control exploration.",
+      tags: ["Hexacopter", "Quadcopter", "Swarm Tech"],
+      imagePlaceholder: "[ Place Hexacopter Swarm Image Here ]",
+      imageGallerySrcs: [hexacopterOne, hexacopterTwo],
+      mediaHint: "Custom DIY drone build with alternating hexacopter preview frames."
     },
     {
       id: "face-emotion-detection",
